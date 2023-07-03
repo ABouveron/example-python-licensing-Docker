@@ -11,13 +11,20 @@ import base64
 import json
 import sys
 import platform
+import os
+import subprocess
 
 def get_serial_number():
   try:
     system = platform.system()
+    print(system)
     if system == 'Windows':
       return platform.win32_machineserial()
     elif system == 'Linux':
+      if os.geteuid() != 0:
+        print("Process needs to be root.")
+        subprocess.call(['sudo','-E', 'python3', *sys.argv])
+        sys.exit()
       with open('/sys/class/dmi/id/product_serial') as f:
         return f.read().strip()
     elif system == 'Darwin':
