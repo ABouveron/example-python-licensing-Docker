@@ -17,7 +17,6 @@ import subprocess
 def get_serial_number():
   try:
     system = platform.system()
-    print(system)
     if system == 'Windows':
       return platform.win32_machineserial()
     elif system == 'Linux':
