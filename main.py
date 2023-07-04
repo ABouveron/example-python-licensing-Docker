@@ -47,24 +47,32 @@ try:
     serial_number = str(serial_number)
     hash_serial = hashlib.sha3_512(serial_number.encode())
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--path', dest='path', default="./machine.lic", help='Path to machine file')
-    parser.add_argument('-l', '--license', dest='license',
-                        default='key/TEg3TS05VldLLUpKSFUtN0NSVC1NUEtSLUg5VUwtOU1GNy03VjlK'
-                                '.hphP_9YaFq0uZykkfH0l9xEmogJ4yUbo3Wym7oIxYgl0uNBwocsS3GZse6U2Ti2a8B09iB5'
-                                '-gi_ilr3V05z4Dw==',
-                        help='License key')
+    parser.add_argument('-p', '--path-machine', dest='path_machine', default="./machine.lic", help='Path to machine '
+                                                                                                   'file')
+    parser.add_argument('-l', '--path-license', dest='path_license', default='./license.lic', help='Path to license '
+                                                                                                   'key file')
     parser.add_argument('-f', '--fingerprint', dest='fingerprint', default=hash_serial.hexdigest(),
                         help='Machine fingerprint')
     KEYGEN_PUBLIC_KEY = '7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23'
     args = parser.parse_args()
     machine_file = None
+    license_file = None
+
+    # Read the license key file
+    try:
+        with open(args.path_license) as f_license:
+            license_key = f_license.read()
+    except (FileNotFoundError, PermissionError):
+        print('[error] license path does not exist! (or permission was denied)')
+
+        sys.exit(1)
 
     # Read the machine file
     try:
-        with open(args.path) as f:
-            machine_file = f.read()
+        with open(args.path_machine) as f_machine:
+            machine_file = f_machine.read()
     except (FileNotFoundError, PermissionError):
-        print('[error] path does not exist! (or permission was denied)')
+        print('[error] machine path does not exist! (or permission was denied)')
 
         sys.exit(1)
 
@@ -105,7 +113,7 @@ try:
 
     # Hash the license key and fingerprint using SHA256
     digest = hashes.Hash(hashes.SHA256())
-    digest.update(args.license.encode())
+    digest.update(license_key.encode())
     digest.update(args.fingerprint.encode())
     key = digest.finalize()
 
