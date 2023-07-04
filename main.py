@@ -36,8 +36,7 @@ def get_serial_number():
 
 serial_number = get_serial_number()
 if not serial_number:
-    print("Impossible de récupérer le numéro de série. Votre système est-il compatible ? Liste des systèmes "
-          "compatibles : Windows, Linux")
+    print("Unable to get serial number. Is your system compatible? Compatible systems : Windows, Linux")
     sys.exit(1)
 else:
     print("Serial number : ", serial_number)
