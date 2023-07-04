@@ -1,4 +1,6 @@
+cffi==1.15.1
+cryptography==41.0.1
+ed25519==1.5
 py-machineid==0.4.1
-argparse
-cryptography
-ed25519
+pycparser==2.21
+winregistry==1.1.1
