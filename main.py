@@ -35,28 +35,32 @@ def get_serial_number():
         sys.exit(1)
 
 
-serial_number = get_serial_number()
-if not serial_number:
-    print("Unable to get serial number. Is your system compatible? Compatible systems : Windows, Linux")
-    sys.exit(1)
-else:
-    print("Serial number : ", serial_number)
-
 try:
     # Definition of all constants and variables needed
-    serial_number = str(serial_number)
-    hash_serial = hashlib.sha3_512(serial_number.encode())
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--path-machine', dest='path_machine', default="./machine.lic", help='Path to machine '
                                                                                                    'file')
     parser.add_argument('-l', '--path-license', dest='path_license', default='./license.lic', help='Path to license '
                                                                                                    'key file')
-    parser.add_argument('-f', '--fingerprint', dest='fingerprint', default=hash_serial.hexdigest(),
-                        help='Machine fingerprint')
-    KEYGEN_PUBLIC_KEY = '7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23'
+    parser.add_argument('-f', '--fingerprint', dest='fingerprint', help='Machine fingerprint')
+    parser.add_argument('-pk', '--public-key', dest='public_key',
+                        default='e8601e48b69383ba520245fd07971e983d06d22c4257cfd82304601479cee788')
     args = parser.parse_args()
     machine_file = None
     license_file = None
+
+    if args.fingerprint is None:
+        serial_number = get_serial_number()
+        if not serial_number:
+            print("Unable to get serial number. Is your system compatible? Compatible systems : Windows, Linux")
+            sys.exit(1)
+        else:
+            print("Serial number : ", serial_number)
+
+        serial_number = str(serial_number)
+        hash_serial = hashlib.sha3_512(serial_number.encode())
+        args.fingerprint = hash_serial.hexdigest()
+        args.public_key = '7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23'
 
     # Read the license key file
     try:
@@ -96,7 +100,7 @@ try:
     # Verify using Ed25519
     try:
         verify_key = ed25519.VerifyingKey(
-            KEYGEN_PUBLIC_KEY.encode(),
+            args.public_key.encode(),
             encoding='hex',
         )
 

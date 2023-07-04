@@ -2,3 +2,4 @@
 env/
 license.lic
 machine.lic
+!examples/*
