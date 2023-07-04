@@ -18,9 +18,8 @@ def get_serial_number():
     try:
         system = platform.system()
         if system == 'Windows':
-            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ",
-                                                                                                             "").replace(
-                "SerialNumber", "")
+            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ", "").\
+                replace("SerialNumber", "")
         elif system == 'Linux':
             if os.geteuid() != 0:
                 print("Process needs to be root.")
@@ -106,7 +105,7 @@ try:
 
         sys.exit(1)
 
-    print('[info] verification successful!')
+    print('[info] machine file verification successful!')
 
     # Hash the license key and fingerprint using SHA256
     digest = hashes.Hash(hashes.SHA256())
@@ -131,11 +130,11 @@ try:
 
         plaintext = dec.update(ciphertext) + dec.finalize_with_tag(tag)
     except (InvalidKey, InvalidTag):
-        print('[error] decryption failed!')
+        print('[error] machine file decryption failed!')
 
         sys.exit(1)
 
-    print('[info] decryption successful!')
+    print('[info] machine file decryption successful!')
     """print(
     json.dumps(json.loads(plaintext.decode()), indent=2)
   )"""
