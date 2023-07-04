@@ -1,4 +1,4 @@
-py-machineid
+py-machineid==0.4.1
 argparse
 cryptography
 ed25519
