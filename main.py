@@ -13,21 +13,14 @@ import platform
 import os
 import subprocess
 
-def get_serial_number_aux():
-    os_type = sys.platform.lower()
-    if "darwin" in os_type:
-        command = "ioreg -l | grep IOPlatformSerialNumber"
-    elif "win" in os_type:
-        command = "wmic bios get serialnumber"
-    elif "linux" in os_type:
-        command = "dmidecode -s baseboard-serial-number"
-    return os.popen(command).read().replace("\n", "").replace("  ", "").replace(" ", "")
 
 def get_serial_number():
     try:
         system = platform.system()
         if system == 'Windows':
-            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ", "").replace("SerialNumber", "")
+            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ",
+                                                                                                             "").replace(
+                "SerialNumber", "")
         elif system == 'Linux':
             if os.geteuid() != 0:
                 print("Process needs to be root.")
@@ -44,7 +37,8 @@ def get_serial_number():
 
 serial_number = get_serial_number()
 if not serial_number:
-    print("Impossible de récupérer le numéro de série.")
+    print("Impossible de récupérer le numéro de série. Votre système est-il compatible ? Liste des systèmes "
+          "compatibles : Windows, Linux")
     sys.exit(1)
 else:
     print("Serial number : ", serial_number)
