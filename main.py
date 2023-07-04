@@ -13,12 +13,21 @@ import platform
 import os
 import subprocess
 
+def get_serial_number_aux():
+    os_type = sys.platform.lower()
+    if "darwin" in os_type:
+        command = "ioreg -l | grep IOPlatformSerialNumber"
+    elif "win" in os_type:
+        command = "wmic bios get serialnumber"
+    elif "linux" in os_type:
+        command = "dmidecode -s baseboard-serial-number"
+    return os.popen(command).read().replace("\n", "").replace("  ", "").replace(" ", "")
 
 def get_serial_number():
     try:
         system = platform.system()
         if system == 'Windows':
-            return platform.win32_machineserial()
+            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ", "").replace("SerialNumber", "")
         elif system == 'Linux':
             if os.geteuid() != 0:
                 print("Process needs to be root.")
@@ -26,8 +35,6 @@ def get_serial_number():
                 sys.exit()
             with open('/sys/class/dmi/id/product_serial') as file:
                 return file.read().strip()
-        elif system == 'Darwin':
-            return platform.system_profiler().get('Hardware').get('Serial Number')
         else:
             return None
     except Exception as error:
