@@ -15,10 +15,11 @@ import subprocess
 
 
 def get_serial_number():
+    # Get serial number of the machine
     try:
         system = platform.system()
         if system == 'Windows':
-            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ", "").\
+            return os.popen("wmic bios get serialnumber").read().replace("\n", "").replace("  ", "").replace(" ", ""). \
                 replace("SerialNumber", "")
         elif system == 'Linux':
             if os.geteuid() != 0:
@@ -42,11 +43,10 @@ else:
     print("Serial number : ", serial_number)
 
 try:
+    # Definition of all constants and variables needed
     serial_number = str(serial_number)
     hash_serial = hashlib.sha3_512(serial_number.encode())
-
     parser = argparse.ArgumentParser()
-
     parser.add_argument('-p', '--path', dest='path', default="./machine.lic", help='Path to machine file')
     parser.add_argument('-l', '--license', dest='license',
                         default='key/TEg3TS05VldLLUpKSFUtN0NSVC1NUEtSLUg5VUwtOU1GNy03VjlK'
@@ -55,14 +55,11 @@ try:
                         help='License key')
     parser.add_argument('-f', '--fingerprint', dest='fingerprint', default=hash_serial.hexdigest(),
                         help='Machine fingerprint')
-
     KEYGEN_PUBLIC_KEY = '7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23'
-
     args = parser.parse_args()
-
-    # Read the machine file
     machine_file = None
 
+    # Read the machine file
     try:
         with open(args.path) as f:
             machine_file = f.read()
@@ -134,9 +131,7 @@ try:
         sys.exit(1)
 
     print('[info] machine file decryption successful!')
-    """print(
-    json.dumps(json.loads(plaintext.decode()), indent=2)
-  )"""
+    # print(json.dumps(json.loads(plaintext.decode()), indent=2)) # Uncomment to see the decrypted machine file
 except Exception as error:
     print("License verification failed, check your license: " + str(error))
     sys.exit(1)
