@@ -25,14 +25,14 @@ def get_serial_number():
             if os.geteuid() != 0:
                 print("Process needs to be root.")
                 subprocess.call(['sudo', '-E', 'python3', *sys.argv])
-                sys.exit()
+                sys.exit(0)
             with open('/sys/class/dmi/id/product_serial') as file:
                 return file.read().strip()
         else:
             return None
     except Exception as error:
         print(f"Unexpected error: {error}")
-        sys.exit(1)
+        return
 
 
 try:
@@ -72,7 +72,7 @@ try:
     except (FileNotFoundError, PermissionError):
         print('[error] license path does not exist! (or permission was denied)')
 
-        sys.exit(1)
+            return
 
     # Read the machine file
     try:
@@ -81,7 +81,7 @@ try:
     except (FileNotFoundError, PermissionError):
         print('[error] machine path does not exist! (or permission was denied)')
 
-        sys.exit(1)
+            return
 
     # Strip the header and footer from the machine file certificate
     payload = machine_file.lstrip('-----BEGIN MACHINE FILE-----\n') \
@@ -98,7 +98,7 @@ try:
     if alg != 'aes-256-gcm+ed25519':
         print('[error] algorithm is not supported!')
 
-        sys.exit(1)
+            return
 
     # Verify using Ed25519
     try:
@@ -114,7 +114,7 @@ try:
     except (AssertionError, BadSignatureError):
         print('[error] verification failed!')
 
-        sys.exit(1)
+            return
 
     print('[info] machine file verification successful!')
 
@@ -143,7 +143,7 @@ try:
     except (InvalidKey, InvalidTag):
         print('[error] machine file decryption failed!')
 
-        sys.exit(1)
+            return
 
     print('[info] machine file decryption successful!')
     # print(json.dumps(json.loads(plaintext.decode()), indent=2)) # Uncomment to see the decrypted machine file
