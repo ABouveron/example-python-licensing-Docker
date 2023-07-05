@@ -64,9 +64,9 @@ def main():
             hash_serial = hashlib.sha3_512(serial_number.encode())
             args.fingerprint = hash_serial.hexdigest()
 
-        print("Replace \"PUBLIC_KEY\" line 66 with your public key (\"Ed25519 128-bit Verify Key\") available in https://app.keygen.sh/settings. Then comment lines 64 & 65 and run again.")
-        sys.exit(1)  # Comment this line to continue
-        args.public_key = 'PUBLIC_KEY'
+            print("Replace \"PUBLIC_KEY\" line 66 with your public key (\"Ed25519 128-bit Verify Key\") available in https://app.keygen.sh/settings. Then comment lines 64 & 65 and run again.")
+            sys.exit(1)  # Comment this line to continue
+            args.public_key = 'PUBLIC_KEY'
 
         # Read the license key file
         try:
