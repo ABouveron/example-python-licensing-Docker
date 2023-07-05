@@ -52,7 +52,7 @@ def main():
         machine_file = None
         license_file = None
 
-        if args.fingerprint is None:
+        if args.fingerprint is None:  # If fingerprint is not provided, get it from the system
             serial_number = get_serial_number()
             if not serial_number:
                 print("Unable to get serial number. Is your system compatible? Compatible systems : Windows, Linux")
