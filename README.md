@@ -11,7 +11,7 @@ python main.py --fingerprint '198e9fe586114844f6a4eaca5069b41a7ed43fb5a2df84892b
 
 ## Normal config:  
 * Your fingerprint should be the hash of the serial number of your machine (you can execute the program to see it) computed with **SHA3_512** ([Online Converter](https://emn178.github.io/online-tools/sha3_512.html)).  
-* Replace the public key from [keygen.sh](keygen.sh) line 63 of `main.py`.
+* Replace the public key from [keygen.sh](keygen.sh) line 66 of `main.py`.
 * Get your machine file on [keygen.sh](keygen.sh) and put the raw license key in a new file named `license.lic`.  
 * Put your `machine.lic` & `license.lic` in the same folder as `main.py` and run:
 
