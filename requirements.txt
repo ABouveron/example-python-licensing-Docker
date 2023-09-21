@@ -1,5 +1,5 @@
 cffi==1.15.1
-cryptography==41.0.3
+cryptography==41.0.4
 ed25519==1.5
 exceptiongroup==1.1.2
 iniconfig==2.0.0
