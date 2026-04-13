@@ -10,7 +10,7 @@ pluggy==1.2.0
 py-machineid==0.4.1
 pycparser==2.21
 Pygments==2.15.1
-pytest==7.4.0
+pytest==9.0.3
 tomli==2.0.1
 winregistry==1.1.1
 setuptools>=65.5.1
